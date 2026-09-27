@@ -212,7 +212,7 @@
   }
   .cal-detail .close-x{float:right;background:none;border:none;color:var(--slate-blue);cursor:pointer;font-size:14.5px;padding:4px;}
 
-  /* Month view */
+  /* Month view — styled to resemble Google Calendar's month grid */
   .cal-mode-tabs{display:flex;gap:6px;}
   .cal-mode-tab{
     border:1px solid var(--line);background:#fff;color:var(--slate-blue);font-size:13px;font-weight:600;
@@ -220,28 +220,32 @@
   }
   .cal-mode-tab.active{background:var(--ink-navy);color:#fff;border-color:var(--ink-navy);}
   .month-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:8px;}
-  .month-grid{display:grid;grid-template-columns:repeat(7,1fr);min-width:560px;}
+  .month-grid{display:grid;grid-template-columns:repeat(7,1fr);min-width:560px;background:var(--line);gap:1px;border-top:1px solid var(--line);}
   .month-head-cell{
-    background:#fff;text-align:center;padding:8px 2px;font-size:12.5px;font-weight:700;color:var(--ink-navy);
-    border-bottom:1px solid var(--line);
+    background:#fff;text-align:center;padding:10px 2px;font-size:11px;font-weight:600;color:var(--slate-blue);
+    letter-spacing:.03em;text-transform:uppercase;
   }
   .month-day-cell{
-    min-height:88px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
-    padding:5px;background:#fff;position:relative;
+    min-height:96px;padding:6px 6px 4px;background:#fff;position:relative;
   }
-  .month-day-cell.other-month{background:#FBF8F1;}
+  .month-day-cell.other-month{background:#fff;}
   .month-day-cell.other-month .month-day-num{color:#c9c2ae;}
   .month-day-num{
-    font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;
-    width:22px;height:22px;cursor:pointer;border-radius:50%;color:var(--ink-navy);
+    font-size:13px;font-weight:400;display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;cursor:pointer;border-radius:50%;color:var(--ink-navy);margin-bottom:2px;
   }
   .month-day-num:hover{background:#F3EEE0;}
-  .month-day-cell.today .month-day-num{background:var(--ink-navy);color:#fff;}
-  .month-event-pill{
-    font-size:10.5px;color:#fff;border-radius:3px;padding:1px 5px;margin-top:3px;white-space:nowrap;
-    overflow:hidden;text-overflow:ellipsis;cursor:pointer;
+  .month-day-cell.today .month-day-num{background:var(--ink-navy);color:#fff;font-weight:600;}
+  .month-event-row{
+    display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-navy);cursor:pointer;
+    padding:2px 3px;border-radius:4px;margin-bottom:1px;white-space:nowrap;overflow:hidden;
   }
-  .month-more-link{font-size:10.5px;color:var(--slate-blue);cursor:pointer;margin-top:3px;display:block;}
+  .month-event-row:hover{background:#F3EEE0;}
+  .month-event-dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .month-event-time{color:var(--slate-blue);flex:none;}
+  .month-event-title{overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+  .month-more-link{font-size:11px;color:var(--slate-blue);cursor:pointer;margin-top:2px;display:block;padding:2px 3px;}
+  .month-more-link:hover{color:var(--ink-navy);text-decoration:underline;}
   .admin-badge{
     display:inline-block;background:var(--sanctuary-gold);color:var(--ink-navy);font-size:11.5px;font-weight:700;
     padding:2px 8px;border-radius:10px;vertical-align:middle;margin-left:4px;
@@ -269,6 +273,117 @@
   .pending-badge{
     display:inline-block;font-size:11.5px;color:#8a4126;background:#FBF0E4;border:1px solid var(--ember);border-radius:10px;
     padding:2px 8px;margin-left:6px;vertical-align:middle;font-weight:600;
+  }
+
+  /* ===== Mobile-friendly components (used only when isMobile() is true) ===== */
+  .grid > *{min-width:0;}
+  .room-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .room-btn{
+    border:1.5px solid var(--line);background:#fff;color:var(--ink-navy);border-radius:10px;
+    padding:14px 10px;min-height:64px;font-size:15.5px;font-weight:600;cursor:pointer;text-align:center;
+    font-family:'Noto Sans TC',sans-serif;line-height:1.3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  }
+  .room-btn small{font-size:12.5px;font-weight:400;color:var(--slate-blue);}
+  .room-btn.active{background:var(--ink-navy);color:#fff;border-color:var(--sanctuary-gold);}
+  .room-btn.active small{color:#E9E2CF;}
+  .room-btn.locked{background:#EDEAE0;color:#8d8778;border-style:dashed;}
+  .room-btn.locked small{color:#8d8778;}
+  .filter-select{
+    width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:#fff;
+    color:var(--ink-navy);font-family:inherit;margin-bottom:14px;
+  }
+  .m-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;}
+  .m-cal-head{text-align:center;font-size:12px;font-weight:700;color:var(--slate-blue);padding:8px 0;background:#FBF8F1;border-bottom:1px solid var(--line);}
+  .m-cal-day{
+    min-height:52px;padding:5px 2px;text-align:center;cursor:pointer;border-top:1px solid #F1ECDF;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+  }
+  .m-cal-day .num{
+    font-size:15px;width:30px;height:30px;line-height:30px;border-radius:50%;color:var(--ink-navy);
+  }
+  .m-cal-day.other-month .num{color:#c9c2ae;}
+  .m-cal-day.today .num{background:var(--ink-navy);color:#fff;font-weight:700;}
+  .m-cal-day.picked{background:#F3EEE0;}
+  .m-cal-day.picked .num{outline:2px solid var(--sanctuary-gold);}
+  .m-dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:36px;}
+  .m-dots span{width:7px;height:7px;border-radius:50%;}
+  .m-dots .more{width:auto;height:auto;font-size:10px;color:var(--slate-blue);line-height:7px;}
+  .agenda-day{margin-top:16px;}
+  .agenda-day-title{
+    font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;padding:8px 2px;border-bottom:2px solid var(--line);
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .agenda-day-title.today{border-bottom-color:var(--sanctuary-gold);}
+  .agenda-day-title small{font-family:'Noto Sans TC',sans-serif;font-size:12.5px;font-weight:600;color:var(--sanctuary-gold);}
+  .agenda-empty{font-size:14px;color:#a39a86;padding:10px 2px;}
+  .agenda-item{
+    display:flex;gap:12px;align-items:stretch;padding:12px 4px;border-bottom:1px solid #F1ECDF;cursor:pointer;
+  }
+  .agenda-bar{width:5px;border-radius:3px;flex:none;}
+  .agenda-time{flex:none;width:78px;font-size:14px;font-weight:600;color:var(--ink-navy);line-height:1.4;}
+  .agenda-time span{display:block;font-weight:400;color:var(--slate-blue);font-size:13px;}
+  .agenda-main{flex:1;min-width:0;}
+  .agenda-room{font-size:16px;font-weight:700;color:var(--ink-navy);}
+  .agenda-sub{font-size:14px;color:var(--slate-blue);margin-top:3px;line-height:1.45;overflow-wrap:anywhere;}
+  .sheet-backdrop{position:fixed;inset:0;background:rgba(31,43,69,.35);z-index:40;}
+
+  @media (max-width:640px){
+    .app{padding:14px 12px 60px;}
+    .header{padding-bottom:12px;margin-bottom:14px;gap:10px;}
+    .brand{gap:10px;min-width:0;}
+    .brand-mark{width:44px;}
+    .brand h1{font-size:17px;line-height:1.3;}
+    .brand p{display:none;}
+    .user-chip{width:100%;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;}
+    .user-chip > div:nth-child(2){flex:1;min-width:0;}
+    .user-chip > div:nth-child(2) > div:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .signout{flex:none;padding:9px 12px;}
+    .view-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+    .view-tab{padding:13px 6px;font-size:15px;text-align:center;}
+    .panel{padding:16px 14px 18px;border-radius:12px;}
+    .panel h2{font-size:18px;}
+    .panel .desc{font-size:14px;margin-bottom:12px;}
+    .grid{gap:14px;}
+    .floor-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+    .floor-tab{padding:11px 4px;font-size:14px;border-radius:8px;text-align:center;}
+    .selected-room-line{font-size:15px;padding:12px;}
+    .field label{font-size:14.5px;}
+    .field input, .field select, .field textarea{min-height:48px;font-size:16px;}
+    .field input[type="date"]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;text-align:left;}
+    .form-row{gap:10px;}
+    .form-row > *{min-width:0;}
+    .submit-btn{width:100%;padding:15px;font-size:16px;border-radius:8px;}
+    .recurring-toggle-btn{width:100%;justify-content:center;}
+    .booking-item{gap:10px;padding:14px 2px;}
+    .b-date{width:46px;}
+    .b-date .d{font-size:21px;}
+    .b-body{min-width:0;}
+    .b-top{flex-direction:column;align-items:flex-start;gap:3px;}
+    .b-room{font-size:16px;}
+    .b-time{font-size:14.5px;font-weight:600;color:var(--ink-navy);white-space:nowrap;}
+    .recurring-badge, .pending-badge{margin:5px 6px 0 0;}
+    .b-room{display:flex;flex-wrap:wrap;align-items:center;gap:0 6px;}
+    .b-room .recurring-badge, .b-room .pending-badge{margin-left:0;}
+    .b-purpose{overflow-wrap:anywhere;}
+    .b-cancel{
+      text-decoration:none;border:1px solid var(--line);border-radius:8px;background:#fff;
+      padding:9px 12px;font-size:14px;
+    }
+    .cal-toolbar{flex-direction:column;align-items:stretch;gap:10px;}
+    .cal-nav{justify-content:space-between;}
+    .cal-nav button{width:44px;height:44px;font-size:20px;}
+    .cal-range{min-width:0;flex:1;font-size:16px;}
+    .cal-today-btn{height:44px;padding:0 12px !important;width:auto !important;font-size:13.5px !important;border-radius:22px !important;}
+    .cal-mode-tabs{display:grid;grid-template-columns:1fr 1fr;}
+    .cal-mode-tab{padding:11px;font-size:14.5px;border-radius:8px;}
+    .cal-room-select{width:100%;font-size:16px;padding:12px;min-height:48px;margin-bottom:12px;}
+    .cal-detail{
+      position:fixed;left:0;right:0;bottom:0;margin:0;z-index:50;max-height:78vh;overflow-y:auto;
+      border-radius:16px 16px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));background:#fff;
+      box-shadow:0 -12px 32px rgba(31,43,69,.25);
+    }
+    .cal-detail .close-x{font-size:15px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;}
+    .login-card{padding:32px 22px 28px;}
   }
 </style>
 </head>
@@ -425,8 +540,18 @@ let state = {
   showRecurringForm: false,
   recurringMsg: {text:'', type:''},
   showPendingOnly: false,
-  expandedSeries: {}
+  expandedSeries: {},
+  calSelectedDay: null
 };
+
+/* Phone-size screens get a simplified, touch-first layout. */
+const MOBILE_MQ = window.matchMedia ? window.matchMedia('(max-width: 640px)') : null;
+function isMobile(){ return !!(MOBILE_MQ && MOBILE_MQ.matches); }
+if(MOBILE_MQ){
+  const onBreakpointChange = () => { if(state.user) render(); };
+  if(MOBILE_MQ.addEventListener) MOBILE_MQ.addEventListener('change', onBreakpointChange);
+  else if(MOBILE_MQ.addListener) MOBILE_MQ.addListener(onBreakpointChange);
+}
 
 /* Demo/testing admin accounts used only when Supabase isn't configured yet. */
 const DEMO_ADMIN_EMAILS = ['test.member@gmail.com', 'admin@gmail.com'];
@@ -1244,6 +1369,100 @@ function renderMapSVG(){
   return `<svg viewBox="${floor.viewBox}" xmlns="http://www.w3.org/2000/svg">${shapes}</svg>`;
 }
 
+/* Mobile replacement for the floor-map SVG: big, easy-to-tap room buttons. */
+function renderRoomGrid(){
+  const floor = FLOORS[state.currentFloor];
+  return `<div class="room-grid">${floor.shapes.map(s => {
+    const isLocked = ADMIN_ONLY_ROOMS.includes(s.name) && !state.isAdmin;
+    const isActive = state.selectedRoom === s.name;
+    const sub = isLocked ? '僅限管理員 Admin only' : (s.sub || '');
+    return `<button type="button" class="room-btn ${isActive?'active':''} ${isLocked?'locked':''}" data-room="${s.name}" data-locked="${isLocked}">
+      <span>${isLocked ? '🔒 ' : ''}${s.name}</span>${sub ? `<small>${sub}</small>` : ''}
+    </button>`;
+  }).join('')}</div>`;
+}
+
+/* One tappable agenda row, used by the mobile week & month views. */
+function renderAgendaItem(ev){
+  const isPending = ev.status === 'pending';
+  return `<div class="agenda-item" data-event-id="${ev.id}" style="${isPending?'opacity:0.7;':''}">
+    <div class="agenda-bar" style="background:${colorForRoom(ev.room)}"></div>
+    <div class="agenda-time">${to12h(ev.start)}<span>${to12h(ev.end)}</span></div>
+    <div class="agenda-main">
+      <div class="agenda-room">${ev.room}${isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}${ev.recurringId ? '<span class="recurring-badge">🔁</span>' : ''}</div>
+      <div class="agenda-sub">${ev.name} · ${ev.purpose}</div>
+    </div>
+  </div>`;
+}
+
+function eventsOnDay(dateISO){
+  return state.bookings
+    .filter(b => b.date === dateISO && (state.calRoomFilter==='all' || b.room === state.calRoomFilter))
+    .sort((a,b) => toMinutes(a.start) - toMinutes(b.start));
+}
+
+/* Mobile month view: compact grid with colored dots; tap a day to list its bookings. */
+function renderMonthGridMobile(){
+  if(!state.calMonthStart) state.calMonthStart = formatISODate(new Date());
+  const monthDate = parseISODate(state.calMonthStart);
+  const year = monthDate.getFullYear(), month = monthDate.getMonth();
+  const todayISO = formatISODate(new Date());
+  const monthsFull = ['1月 Jan','2月 Feb','3月 Mar','4月 Apr','5月 May','6月 Jun','7月 Jul','8月 Aug','9月 Sep','10月 Oct','11月 Nov','12月 Dec'];
+  const dow = ['一','二','三','四','五','六','日'];
+
+  // Keep the picked day inside the displayed month (default: today or the 1st).
+  let picked = state.calSelectedDay;
+  if(!picked || parseISODate(picked).getMonth() !== month || parseISODate(picked).getFullYear() !== year){
+    const t = new Date();
+    picked = (t.getMonth() === month && t.getFullYear() === year) ? todayISO : formatISODate(new Date(year, month, 1));
+    state.calSelectedDay = picked;
+  }
+
+  const first = new Date(year, month, 1);
+  const offset = first.getDay() === 0 ? 6 : first.getDay() - 1;
+  const start = new Date(first); start.setDate(1 - offset);
+  const daysInView = offset + new Date(year, month+1, 0).getDate();
+  const total = Math.ceil(daysInView / 7) * 7;
+
+  let cells = '';
+  for(let i=0; i<total; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const iso = formatISODate(d);
+    const evs = eventsOnDay(iso);
+    const dots = evs.slice(0,4).map(ev => `<span style="background:${colorForRoom(ev.room)};${ev.status==='pending'?'opacity:.5;':''}"></span>`).join('')
+      + (evs.length > 4 ? '<span class="more">+</span>' : '');
+    cells += `<div class="m-cal-day ${d.getMonth()!==month?'other-month':''} ${iso===todayISO?'today':''} ${iso===picked?'picked':''}" data-pick-day="${iso}">
+      <div class="num">${d.getDate()}</div><div class="m-dots">${dots}</div></div>`;
+  }
+
+  const pd = parseISODate(picked);
+  const dowFull = ['日 Sun','一 Mon','二 Tue','三 Wed','四 Thu','五 Fri','六 Sat'];
+  const dayEvents = eventsOnDay(picked);
+  const listHtml = `<div class="agenda-day">
+    <div class="agenda-day-title ${picked===todayISO?'today':''}"><span>${pd.getMonth()+1}/${pd.getDate()}（${dowFull[pd.getDay()]}）</span>${picked===todayISO?'<small>今天 Today</small>':''}</div>
+    ${dayEvents.length ? dayEvents.map(renderAgendaItem).join('') : '<div class="agenda-empty">這天沒有預約 No bookings this day</div>'}
+  </div>`;
+
+  return {
+    rangeLabel: monthsFull[month] + ' ' + year,
+    html: `<div class="m-cal-grid">${dow.map(x => `<div class="m-cal-head">${x}</div>`).join('')}${cells}</div>${listHtml}`
+  };
+}
+
+/* Mobile week view: a vertical agenda, one section per day. */
+function renderWeekAgendaMobile(days){
+  const todayISO = formatISODate(new Date());
+  const dowNames = ['一 Mon','二 Tue','三 Wed','四 Thu','五 Fri','六 Sat','日 Sun'];
+  return days.map((iso, i) => {
+    const d = parseISODate(iso);
+    const evs = eventsOnDay(iso);
+    return `<div class="agenda-day">
+      <div class="agenda-day-title ${iso===todayISO?'today':''}"><span>${d.getMonth()+1}/${d.getDate()}（${dowNames[i]}）</span>${iso===todayISO?'<small>今天 Today</small>':''}</div>
+      ${evs.length ? evs.map(renderAgendaItem).join('') : '<div class="agenda-empty">沒有預約 No bookings</div>'}
+    </div>`;
+  }).join('');
+}
+
 function renderMonthGrid(){
   if(!state.calMonthStart) state.calMonthStart = formatISODate(new Date());
   const monthDate = parseISODate(state.calMonthStart);
@@ -1283,13 +1502,17 @@ function renderMonthGrid(){
     const extraCount = dayEvents.length - visibleEvents.length;
 
     const pills = visibleEvents.map(ev => {
-      const bg = state.calRoomFilter==='all' ? colorForRoom(ev.room) : 'var(--ink-navy)';
+      const dotColor = state.calRoomFilter==='all' ? colorForRoom(ev.room) : 'var(--ink-navy)';
       const isPending = ev.status === 'pending';
-      const label = (isPending ? '⏳ ' : '') + to12h(ev.start) + ' ' + (state.calRoomFilter==='all' ? ev.room : ev.name);
+      const titleText = (isPending ? '⏳ ' : '') + (state.calRoomFilter==='all' ? ev.room : ev.name);
       const titleAttr = `${ev.room} · ${to12h(ev.start)}-${to12h(ev.end)} · ${ev.name} · ${ev.purpose}`.replace(/"/g,'&quot;');
-      return `<div class="month-event-pill" data-event-id="${ev.id}" title="${titleAttr}" style="background:${bg};${isPending?'opacity:0.65;':''}">${label}</div>`;
+      return `<div class="month-event-row" data-event-id="${ev.id}" title="${titleAttr}" style="${isPending?'opacity:0.65;':''}">
+        <span class="month-event-dot" style="background:${dotColor};"></span>
+        <span class="month-event-time">${to12h(ev.start)}</span>
+        <span class="month-event-title">${titleText}</span>
+      </div>`;
     }).join('');
-    const moreLink = extraCount > 0 ? `<span class="month-more-link" data-goto-day="${dateISO}">+${extraCount} 更多 more</span>` : '';
+    const moreLink = extraCount > 0 ? `<span class="month-more-link" data-goto-day="${dateISO}">還有 ${extraCount} 筆 ${extraCount} more</span>` : '';
 
     return `<div class="month-day-cell ${isOtherMonth?'other-month':''} ${isToday?'today':''}">
       <div class="month-day-num" data-goto-day="${dateISO}">${d.getDate()}</div>
@@ -1317,7 +1540,7 @@ function renderCalendarPanel(){
     `<option value="${r}" ${state.calRoomFilter===r?'selected':''}>${r==='all'?'全部空間 All Rooms':r}</option>`
   ).join('');
 
-  const legend = state.calRoomFilter === 'all' ? `<div class="cal-legend">
+  const legend = (state.calRoomFilter === 'all' && !isMobile()) ? `<div class="cal-legend">
     ${ROOMS.map(r => `<div class="cal-legend-item"><span class="cal-legend-dot" style="background:${colorForRoom(r)}"></span>${r}</div>`).join('')}
   </div>` : '';
 
@@ -1353,7 +1576,7 @@ function renderCalendarPanel(){
 
   let gridSection;
   if(state.calViewMode === 'month'){
-    const month = renderMonthGrid();
+    const month = isMobile() ? renderMonthGridMobile() : renderMonthGrid();
     gridSection = `
       <div class="cal-toolbar">
         <div class="cal-nav">
@@ -1436,25 +1659,26 @@ function renderCalendarPanel(){
       </div>
       <select class="cal-room-select" id="cal-room-filter">${roomFilterOptions}</select>
 
-      <div class="cal-scroll" id="cal-scroll">
+      ${isMobile() ? renderWeekAgendaMobile(days) : `<div class="cal-scroll" id="cal-scroll">
         <div class="cal-grid">
           <div class="cal-corner"></div>
           ${headCells}
           <div class="cal-time-col" style="height:${gridHeight}px">${timeLabelsHtml}</div>
           ${dayColumns}
         </div>
-      </div>
+      </div>`}
     `;
   }
 
   return `
     <div class="panel">
       <h2>空間預約行事曆 Booking Calendar</h2>
-      <p class="desc">類似 Google 日曆的檢視，可切換週/月檢視，也可切換看全部空間或單一空間。<br>A Google Calendar-style view — switch between week/month, and all rooms or a single room.</p>
+      ${isMobile() ? '' : `<p class="desc">類似 Google 日曆的檢視，可切換週/月檢視，也可切換看全部空間或單一空間。<br>A Google Calendar-style view — switch between week/month, and all rooms or a single room.</p>`}
 
       ${gridSection}
 
       ${legend}
+      ${detail && isMobile() ? '<div class="sheet-backdrop" id="cal-sheet-backdrop"></div>' : ''}
       ${detail}
     </div>
   `;
@@ -1574,7 +1798,7 @@ function renderApp(){
         <img src="${CHURCH_LOGO_DATA_URI}" alt="Wilmington Community Evangelical Church 威明頓主恩堂">
       </div>
       <div>
-        <h1>教會空間預約系統 Church Space Booking</h1>
+        <h1>${isMobile() ? '空間預約 Room Booking' : '教會空間預約系統 Church Space Booking'}</h1>
         <p>會員專用 · 場地借用申請 Members only · Room booking</p>
       </div>
     </div>
@@ -1599,11 +1823,11 @@ function renderApp(){
   <div class="grid">
     <div class="panel">
       <h2>選擇空間並提出申請 Choose a Space</h2>
-      <p class="desc">點選樓層地圖上的房間，或用下方清單快速切換。<br>Click a room on the floor map, or use the list below.</p>
+      ${isMobile() ? `<p class="desc">先選樓層，再點選空間。<br>Pick a floor, then tap a room.</p>` : `<p class="desc">點選樓層地圖上的房間，或用下方清單快速切換。<br>Click a room on the floor map, or use the list below.</p>`}
 
       <div class="floor-tabs">${floorTabs}</div>
-      <div class="map-wrap">${renderMapSVG()}</div>
-      <p class="map-hint">提示：地下室與教室較小的空間點擊可能較不易對準，可用下方篩選清單輔助選取。<br>Tip: small rooms can be hard to tap precisely — use the filter list below instead.</p>
+      ${isMobile() ? renderRoomGrid() : `<div class="map-wrap">${renderMapSVG()}</div>
+      <p class="map-hint">提示：地下室與教室較小的空間點擊可能較不易對準，可用下方篩選清單輔助選取。<br>Tip: small rooms can be hard to tap precisely — use the filter list below instead.</p>`}
 
       <div class="selected-room-line">已選空間 Selected：<b>${state.selectedRoom}</b></div>
 
@@ -1647,9 +1871,11 @@ function renderApp(){
 
     <div class="panel">
       <h2>即將到來的預約 Upcoming Bookings</h2>
-      <p class="desc">所有會員皆可查看，避免時段衝突。<br>Visible to all members to help avoid double-booking.</p>
+      ${isMobile() ? '' : `<p class="desc">所有會員皆可查看，避免時段衝突。<br>Visible to all members to help avoid double-booking.</p>`}
       ${state.isAdmin ? `<button class="recurring-toggle-btn" id="pending-only-toggle" style="${state.showPendingOnly ? '' : 'background:#fff;border-color:var(--line);'}">${state.showPendingOnly ? '✓ 只顯示待審核 Showing pending only' : '⏳ 只顯示待審核 Show pending only'}</button>` : ''}
-      <div class="filter-bar">${filterChips}</div>
+      ${isMobile()
+        ? `<select class="filter-select" id="filter-room-select">${['all', ...ROOMS].map(r => `<option value="${r}" ${state.filterRoom===r?'selected':''}>${r==='all'?'全部空間 All Rooms':r}</option>`).join('')}</select>`
+        : `<div class="filter-bar">${filterChips}</div>`}
       ${bookingListHtml}
     </div>
   </div>
@@ -1695,6 +1921,7 @@ function renderApp(){
     document.getElementById('cal-today').addEventListener('click', () => {
       if(state.calViewMode === 'month'){
         state.calMonthStart = formatISODate(new Date());
+        state.calSelectedDay = formatISODate(new Date());
       } else {
         state.calWeekStart = formatISODate(mondayOf(new Date()));
       }
@@ -1710,7 +1937,12 @@ function renderApp(){
         render();
       });
     });
-    wrap.querySelectorAll('.cal-event, .month-event-pill').forEach(ev => {
+    wrap.querySelectorAll('[data-pick-day]').forEach(el => {
+      el.addEventListener('click', () => { state.calSelectedDay = el.dataset.pickDay; state.selectedEventId = null; render(); });
+    });
+    const sheetBackdrop = document.getElementById('cal-sheet-backdrop');
+    if(sheetBackdrop) sheetBackdrop.addEventListener('click', () => { state.selectedEventId = null; state.editingBookingId = null; render(); });
+    wrap.querySelectorAll('.cal-event, .month-event-row, .agenda-item').forEach(ev => {
       ev.addEventListener('click', () => {
         state.selectedEventId = ev.dataset.eventId;
         render();
@@ -1737,7 +1969,10 @@ function renderApp(){
       });
     });
 
-    wrap.querySelectorAll('.room-shape').forEach(shape => {
+    const filterSelect = document.getElementById('filter-room-select');
+    if(filterSelect) filterSelect.addEventListener('change', (e) => { state.filterRoom = e.target.value; render(); });
+
+    wrap.querySelectorAll('.room-shape, .room-btn').forEach(shape => {
       shape.addEventListener('click', () => {
         if(shape.dataset.locked === 'true'){
           alert('此空間僅限管理者預約，請洽教會辦公室協助安排。\nThis space can only be booked by an admin — please contact the church office for help.');
