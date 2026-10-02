@@ -424,11 +424,11 @@ function renderBookingRow(b){
     <div class="b-date"><div class="d">${md.d}</div><div class="m">${md.m}</div></div>
     <div class="b-body">
       <div class="b-top">
-        <span class="b-room">${b.room}${b.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}</span>
+        <span class="b-room">${escHtml(b.room)}${b.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}</span>
         <span class="b-time">${to12h(b.start)} - ${to12h(b.end)}</span>
       </div>
-      <div class="b-who">預約人 Booked by：${b.name}</div>
-      <div class="b-purpose">${b.purpose}</div>
+      <div class="b-who">預約人 Booked by：${escHtml(b.name)}</div>
+      <div class="b-purpose">${escHtml(b.purpose)}</div>
     </div>
   </div>`;
 }
@@ -481,11 +481,11 @@ function renderListPanel(){
         <div class="b-date"><div class="d">${md.d}</div><div class="m">${md.m}</div></div>
         <div class="b-body">
           <div class="b-top">
-            <span class="b-room">${first.room}<span class="recurring-badge">🔁 重複 Recurring · 共 ${unit.items.length} 筆</span></span>
+            <span class="b-room">${escHtml(first.room)}<span class="recurring-badge">🔁 重複 Recurring · 共 ${unit.items.length} 筆</span></span>
             <span class="b-time">${to12h(first.start)} - ${to12h(first.end)}</span>
           </div>
-          <div class="b-who">預約人 Booked by：${first.name}</div>
-          <div class="b-purpose">${first.purpose}</div>
+          <div class="b-who">預約人 Booked by：${escHtml(first.name)}</div>
+          <div class="b-purpose">${escHtml(first.purpose)}</div>
           <button class="expand-link" data-expand-series="${unit.recurringId}">顯示全部 ${unit.items.length} 筆 Show all ▼</button>
         </div>
       </div>`;
@@ -515,12 +515,12 @@ if(MOBILE_MQ){
 /* One tappable agenda row, used by the mobile week & month views. */
 function renderAgendaItem(ev){
   const isPending = ev.status === 'pending';
-  return `<div class="agenda-item" data-event-id="${ev.id}" style="${isPending?'opacity:0.7;':''}">
+  return `<div class="agenda-item" data-event-id="${escHtml(ev.id)}" style="${isPending?'opacity:0.7;':''}">
     <div class="agenda-bar" style="background:${colorForRoom(ev.room)}"></div>
     <div class="agenda-time">${to12h(ev.start)}<span>${to12h(ev.end)}</span></div>
     <div class="agenda-main">
-      <div class="agenda-room">${ev.room}${isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}${ev.recurringId ? '<span class="recurring-badge">🔁</span>' : ''}</div>
-      <div class="agenda-sub">${ev.name} · ${ev.purpose}</div>
+      <div class="agenda-room">${escHtml(ev.room)}${isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}${ev.recurringId ? '<span class="recurring-badge">🔁</span>' : ''}</div>
+      <div class="agenda-sub">${escHtml(ev.name)} · ${escHtml(ev.purpose)}</div>
     </div>
   </div>`;
 }
@@ -634,8 +634,8 @@ function renderMonthGrid(){
     const pills = visibleEvents.map(ev => {
       const dotColor = state.calRoomFilter==='all' ? colorForRoom(ev.room) : 'var(--ink-navy)';
       const titleText = state.calRoomFilter==='all' ? ev.room : ev.name;
-      const titleAttr = `${ev.room} · ${to12h(ev.start)}-${to12h(ev.end)} · ${ev.name} · ${ev.purpose}`.replace(/"/g,'&quot;');
-      return `<div class="month-event-row" data-event-id="${ev.id}" title="${titleAttr}">
+      const titleAttr = `${escHtml(ev.room)} · ${to12h(ev.start)}-${to12h(ev.end)} · ${escHtml(ev.name)} · ${escHtml(ev.purpose)}`.replace(/"/g,'&quot;');
+      return `<div class="month-event-row" data-event-id="${escHtml(ev.id)}" title="${titleAttr}">
         <span class="month-event-dot" style="background:${dotColor};"></span>
         <span class="month-event-time">${to12h(ev.start)}</span>
         <span class="month-event-title">${titleText}</span>
@@ -669,10 +669,10 @@ function renderCalendarPanel(){
   const selected = state.selectedEventId ? state.bookings.find(b => b.id === state.selectedEventId) : null;
   const detail = selected ? `<div class="cal-detail">
     <button class="close-x" id="cal-detail-close">✕ 關閉 Close</button>
-    <div style="font-weight:700;font-family:'Noto Serif TC',serif;font-size:16.5px;">${selected.room}${selected.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}</div>
-    <div style="font-size:14px;color:var(--slate-blue);margin-top:5px;">${selected.date}　${to12h(selected.start)} - ${to12h(selected.end)}</div>
-    <div style="font-size:14.5px;margin-top:8px;">預約人 Booked by：${selected.name}</div>
-    <div style="font-size:14.5px;margin-top:5px;line-height:1.5;">${selected.purpose}</div>
+    <div style="font-weight:700;font-family:'Noto Serif TC',serif;font-size:16.5px;">${escHtml(selected.room)}${selected.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}</div>
+    <div style="font-size:14px;color:var(--slate-blue);margin-top:5px;">${escHtml(selected.date)}　${to12h(selected.start)} - ${to12h(selected.end)}</div>
+    <div style="font-size:14.5px;margin-top:8px;">預約人 Booked by：${escHtml(selected.name)}</div>
+    <div style="font-size:14.5px;margin-top:5px;line-height:1.5;">${escHtml(selected.purpose)}</div>
   </div>` : '';
 
   const modeTabs = `
@@ -736,8 +736,8 @@ function renderCalendarPanel(){
         const leftPct = ev.lane * widthPct;
         const bg = state.calRoomFilter==='all' ? colorForRoom(ev.room) : 'var(--ink-navy)';
         const label = state.calRoomFilter==='all' ? ev.room : ev.name;
-        const titleAttr = `${ev.room} · ${to12h(ev.start)}-${to12h(ev.end)} · ${ev.name} · ${ev.purpose}`.replace(/"/g,'&quot;');
-        return `<div class="cal-event" data-event-id="${ev.id}" title="${titleAttr}"
+        const titleAttr = `${escHtml(ev.room)} · ${to12h(ev.start)}-${to12h(ev.end)} · ${escHtml(ev.name)} · ${escHtml(ev.purpose)}`.replace(/"/g,'&quot;');
+        return `<div class="cal-event" data-event-id="${escHtml(ev.id)}" title="${titleAttr}"
           style="top:${top}px;height:${height}px;left:calc(${leftPct}% + 2px);width:calc(${widthPct}% - 4px);background:${bg};">
           <b>${label}</b>${to12h(ev.start)}-${to12h(ev.end)}
         </div>`;

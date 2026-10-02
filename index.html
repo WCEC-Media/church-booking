@@ -1014,7 +1014,7 @@ async function handleSubmit(e){
     b.room === room && b.date === date && overlaps(start, end, b.start, b.end)
   );
   if(conflict){
-    state.formMsg = {text:`此時段 ${room} 已被 ${conflict.name} 預約（${to12h(conflict.start)}-${to12h(conflict.end)}），請選擇其他時間。 This time slot is already booked by ${conflict.name}.`, type:'bad'};
+    state.formMsg = {text:`此時段 ${room} 已被 ${escHtml(conflict.name)} 預約（${to12h(conflict.start)}-${to12h(conflict.end)}），請選擇其他時間。 This time slot is already booked by ${escHtml(conflict.name)}.`, type:'bad'};
     render(); return;
   }
 
@@ -1115,7 +1115,7 @@ async function handleEditSubmit(e, id){
     b.id !== id && b.room === room && b.date === date && overlaps(start, end, b.start, b.end)
   );
   if(conflict){
-    state.editMsg = {text:`此時段 ${room} 已被 ${conflict.name} 預約（${to12h(conflict.start)}-${to12h(conflict.end)}），請選擇其他時間。 This time slot is already booked by ${conflict.name}.`, type:'bad'};
+    state.editMsg = {text:`此時段 ${room} 已被 ${escHtml(conflict.name)} 預約（${to12h(conflict.start)}-${to12h(conflict.end)}），請選擇其他時間。 This time slot is already booked by ${escHtml(conflict.name)}.`, type:'bad'};
     render(); return;
   }
 
@@ -1257,7 +1257,7 @@ function renderRecurringForm(){
       </div>
       <div class="field">
         <label>預約人姓名 Booker Name</label>
-        <input type="text" name="booker_name" value="${state.user.name}">
+        <input type="text" name="booker_name" value="${escHtml(state.user.name)}">
       </div>
       <div class="field">
         <label>重複星期幾（可複選）Repeat on (multi-select)</label>
@@ -1315,18 +1315,18 @@ function renderEditForm(b){
   const startOptions = TIME_OPTIONS.map(t => `<option value="${t}" ${t===b.start?'selected':''}>${to12h(t)}</option>`).join('');
   const endOptions = TIME_OPTIONS.map(t => `<option value="${t}" ${t===b.end?'selected':''}>${to12h(t)}</option>`).join('');
   return `
-    <form class="edit-form" data-edit-id="${b.id}">
+    <form class="edit-form" data-edit-id="${escHtml(b.id)}">
       <div class="field">
         <label>空間 Room</label>
         <select name="room">${roomOptions}</select>
       </div>
       <div class="field">
         <label>預約人姓名 Booker Name</label>
-        <input type="text" name="booker_name" value="${b.name}">
+        <input type="text" name="booker_name" value="${escHtml(b.name)}">
       </div>
       <div class="field">
         <label>日期 Date</label>
-        <input type="date" name="date" value="${b.date}">
+        <input type="date" name="date" value="${escHtml(b.date)}">
       </div>
       <div class="form-row">
         <div class="field">
@@ -1340,11 +1340,11 @@ function renderEditForm(b){
       </div>
       <div class="field">
         <label>用途 Purpose</label>
-        <textarea name="purpose">${b.purpose}</textarea>
+        <textarea name="purpose">${escHtml(b.purpose)}</textarea>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
         <button type="submit" class="submit-btn" style="margin-top:0;">儲存修改 Save</button>
-        <button type="button" class="cancel-edit-btn" data-cancel-edit="${b.id}">取消 Cancel</button>
+        <button type="button" class="cancel-edit-btn" data-cancel-edit="${escHtml(b.id)}">取消 Cancel</button>
       </div>
       <div class="form-msg ${state.editMsg.type}">${state.editMsg.text}</div>
     </form>
@@ -1453,12 +1453,12 @@ function renderRoomGrid(){
 /* One tappable agenda row, used by the mobile week & month views. */
 function renderAgendaItem(ev){
   const isPending = ev.status === 'pending';
-  return `<div class="agenda-item" data-event-id="${ev.id}" style="${isPending?'opacity:0.7;':''}">
+  return `<div class="agenda-item" data-event-id="${escHtml(ev.id)}" style="${isPending?'opacity:0.7;':''}">
     <div class="agenda-bar" style="background:${colorForRoom(ev.room)}"></div>
     <div class="agenda-time">${to12h(ev.start)}<span>${to12h(ev.end)}</span></div>
     <div class="agenda-main">
-      <div class="agenda-room">${ev.room}${isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}${ev.recurringId ? '<span class="recurring-badge">🔁</span>' : ''}</div>
-      <div class="agenda-sub">${ev.name} · ${ev.purpose}</div>
+      <div class="agenda-room">${escHtml(ev.room)}${isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}${ev.recurringId ? '<span class="recurring-badge">🔁</span>' : ''}</div>
+      <div class="agenda-sub">${escHtml(ev.name)} · ${escHtml(ev.purpose)}</div>
     </div>
   </div>`;
 }
@@ -1575,8 +1575,8 @@ function renderMonthGrid(){
       const dotColor = state.calRoomFilter==='all' ? colorForRoom(ev.room) : 'var(--ink-navy)';
       const isPending = ev.status === 'pending';
       const titleText = (isPending ? '⏳ ' : '') + (state.calRoomFilter==='all' ? ev.room : ev.name);
-      const titleAttr = `${ev.room} · ${to12h(ev.start)}-${to12h(ev.end)} · ${ev.name} · ${ev.purpose}`.replace(/"/g,'&quot;');
-      return `<div class="month-event-row" data-event-id="${ev.id}" title="${titleAttr}" style="${isPending?'opacity:0.65;':''}">
+      const titleAttr = `${escHtml(ev.room)} · ${to12h(ev.start)}-${to12h(ev.end)} · ${escHtml(ev.name)} · ${escHtml(ev.purpose)}`.replace(/"/g,'&quot;');
+      return `<div class="month-event-row" data-event-id="${escHtml(ev.id)}" title="${titleAttr}" style="${isPending?'opacity:0.65;':''}">
         <span class="month-event-dot" style="background:${dotColor};"></span>
         <span class="month-event-time">${to12h(ev.start)}</span>
         <span class="month-event-title">${titleText}</span>
@@ -1622,19 +1622,19 @@ function renderCalendarPanel(){
   const detail = selected ? `<div class="cal-detail">
     <button class="close-x" id="cal-detail-close">✕ 關閉 Close</button>
     ${state.editingBookingId === selected.id ? renderEditForm(selected) : `
-    <div style="font-weight:700;font-family:'Noto Serif TC',serif;font-size:16.5px;">${selected.room}${selected.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}${selectedIsPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}</div>
-    <div style="font-size:14px;color:var(--slate-blue);margin-top:5px;">${selected.date}　${to12h(selected.start)} - ${to12h(selected.end)}</div>
-    <div style="font-size:14.5px;margin-top:8px;">預約人 Booked by：${selected.name}</div>
-    <div style="font-size:14.5px;margin-top:5px;line-height:1.5;">${selected.purpose}</div>
+    <div style="font-weight:700;font-family:'Noto Serif TC',serif;font-size:16.5px;">${escHtml(selected.room)}${selected.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}${selectedIsPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : ''}</div>
+    <div style="font-size:14px;color:var(--slate-blue);margin-top:5px;">${escHtml(selected.date)}　${to12h(selected.start)} - ${to12h(selected.end)}</div>
+    <div style="font-size:14.5px;margin-top:8px;">預約人 Booked by：${escHtml(selected.name)}</div>
+    <div style="font-size:14.5px;margin-top:5px;line-height:1.5;">${escHtml(selected.purpose)}</div>
     ${canManageSelected ? `<div style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;">
       ${selectedIsPending && state.isAdmin ? `
-        <button class="b-cancel" style="color:var(--forest);" data-approve="${selected.id}">核准 Approve</button>
-        <button class="b-cancel" data-reject="${selected.id}">拒絕 Reject</button>
-        <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${selected.id}">編輯 Edit</button>
+        <button class="b-cancel" style="color:var(--forest);" data-approve="${escHtml(selected.id)}">核准 Approve</button>
+        <button class="b-cancel" data-reject="${escHtml(selected.id)}">拒絕 Reject</button>
+        <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${escHtml(selected.id)}">編輯 Edit</button>
       ` : `
-        <button class="b-cancel" data-cancel="${selected.id}">取消預約 Cancel</button>
-        <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${selected.id}">編輯 Edit</button>
-        ${selected.recurringId ? `<button class="b-cancel" data-cancel-series="${selected.recurringId}">取消整個系列 Cancel series</button>` : ''}
+        <button class="b-cancel" data-cancel="${escHtml(selected.id)}">取消預約 Cancel</button>
+        <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${escHtml(selected.id)}">編輯 Edit</button>
+        ${selected.recurringId ? `<button class="b-cancel" data-cancel-series="${escHtml(selected.recurringId)}">取消整個系列 Cancel series</button>` : ''}
       `}
     </div>` : ''}
     `}
@@ -1700,8 +1700,8 @@ function renderCalendarPanel(){
         const isPending = ev.status === 'pending';
         const label = (isPending ? '⏳ ' : '') + (state.calRoomFilter==='all' ? ev.room : ev.name);
         const pendingStyle = isPending ? 'opacity:0.6;border-style:dashed;border-width:2px;' : '';
-        const titleAttr = `${ev.room} · ${to12h(ev.start)}-${to12h(ev.end)} · ${ev.name} · ${ev.purpose}${isPending ? ' · 待審核 Pending' : ''}`.replace(/"/g,'&quot;');
-        return `<div class="cal-event" data-event-id="${ev.id}" title="${titleAttr}"
+        const titleAttr = `${escHtml(ev.room)} · ${to12h(ev.start)}-${to12h(ev.end)} · ${escHtml(ev.name)} · ${escHtml(ev.purpose)}${isPending ? ' · 待審核 Pending' : ''}`.replace(/"/g,'&quot;');
+        return `<div class="cal-event" data-event-id="${escHtml(ev.id)}" title="${titleAttr}"
           style="top:${top}px;height:${height}px;left:calc(${leftPct}% + 2px);width:calc(${widthPct}% - 4px);background:${bg};${pendingStyle}">
           <b>${label}</b>${to12h(ev.start)}-${to12h(ev.end)}
         </div>`;
@@ -1786,21 +1786,21 @@ function renderApp(){
     const statusBadge = isPending ? '<span class="pending-badge">⏳ 待審核 Pending</span>' : '';
     const showSeriesCancelBtn = b.recurringId && !opts.hideSeriesCancel;
     const actionButtons = isPending && state.isAdmin
-      ? `<button class="b-cancel" style="color:var(--forest);" data-approve="${b.id}">核准 Approve</button>
-         <button class="b-cancel" data-reject="${b.id}">拒絕 Reject</button>
-         <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${b.id}">編輯 Edit</button>`
-      : `<button class="b-cancel" data-cancel="${b.id}">取消預約 Cancel</button>
-         <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${b.id}">編輯 Edit</button>
-         ${showSeriesCancelBtn ? `<button class="b-cancel" data-cancel-series="${b.recurringId}">取消整個系列 Cancel series</button>` : ''}`;
+      ? `<button class="b-cancel" style="color:var(--forest);" data-approve="${escHtml(b.id)}">核准 Approve</button>
+         <button class="b-cancel" data-reject="${escHtml(b.id)}">拒絕 Reject</button>
+         <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${escHtml(b.id)}">編輯 Edit</button>`
+      : `<button class="b-cancel" data-cancel="${escHtml(b.id)}">取消預約 Cancel</button>
+         <button class="b-cancel" style="color:var(--slate-blue);" data-edit="${escHtml(b.id)}">編輯 Edit</button>
+         ${showSeriesCancelBtn ? `<button class="b-cancel" data-cancel-series="${escHtml(b.recurringId)}">取消整個系列 Cancel series</button>` : ''}`;
     return `<div class="booking-item">
       <div class="b-date"><div class="d">${md.d}</div><div class="m">${md.m}</div></div>
       <div class="b-body">
         <div class="b-top">
-          <span class="b-room">${b.room}${b.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}${statusBadge}</span>
+          <span class="b-room">${escHtml(b.room)}${b.recurringId ? '<span class="recurring-badge">🔁 重複 Recurring</span>' : ''}${statusBadge}</span>
           <span class="b-time">${to12h(b.start)} - ${to12h(b.end)}</span>
         </div>
-        <div class="b-who">預約人 Booked by：${b.name}</div>
-        <div class="b-purpose">${b.purpose}</div>
+        <div class="b-who">預約人 Booked by：${escHtml(b.name)}</div>
+        <div class="b-purpose">${escHtml(b.purpose)}</div>
         ${canManage ? `<div style="margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">${actionButtons}</div>` : ''}
       </div>
     </div>`;
@@ -1850,11 +1850,11 @@ function renderApp(){
         <div class="b-date"><div class="d">${md.d}</div><div class="m">${md.m}</div></div>
         <div class="b-body">
           <div class="b-top">
-            <span class="b-room">${first.room}<span class="recurring-badge">🔁 重複 Recurring · 共 ${unit.items.length} 筆 · ${unit.items.length} occurrences</span></span>
+            <span class="b-room">${escHtml(first.room)}<span class="recurring-badge">🔁 重複 Recurring · 共 ${unit.items.length} 筆 · ${unit.items.length} occurrences</span></span>
             <span class="b-time">${to12h(first.start)} - ${to12h(first.end)}</span>
           </div>
-          <div class="b-who">預約人 Booked by：${first.name}</div>
-          <div class="b-purpose">${first.purpose}</div>
+          <div class="b-who">預約人 Booked by：${escHtml(first.name)}</div>
+          <div class="b-purpose">${escHtml(first.purpose)}</div>
           <div style="margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">
             <button class="b-cancel" style="color:var(--slate-blue);" data-expand-series="${unit.recurringId}">顯示全部 ${unit.items.length} 筆 Show all ▼</button>
             ${canManage ? `<button class="b-cancel" data-cancel-series="${unit.recurringId}">取消整個系列 Cancel series</button>` : ''}
@@ -1878,8 +1878,8 @@ function renderApp(){
     <div class="user-chip">
       <div class="dot">${initials(state.user.name)}</div>
       <div>
-        <div style="font-weight:600;color:var(--ink-navy);">${state.user.name} ${state.isAdmin ? '<span class="admin-badge">管理員 Admin</span>' : ''}</div>
-        <div>${state.user.email}</div>
+        <div style="font-weight:600;color:var(--ink-navy);">${escHtml(state.user.name)} ${state.isAdmin ? '<span class="admin-badge">管理員 Admin</span>' : ''}</div>
+        <div>${escHtml(state.user.email)}</div>
       </div>
       <button class="signout" id="signout-btn">登出 Sign Out</button>
     </div>
@@ -1910,7 +1910,7 @@ function renderApp(){
       <form id="booking-form" novalidate>
         <div class="field">
           <label>預約人姓名 Booker Name</label>
-          <input type="text" name="booker_name" placeholder="請輸入預約人姓名 Enter booker's name" value="${state.user.name}">
+          <input type="text" name="booker_name" placeholder="請輸入預約人姓名 Enter booker's name" value="${escHtml(state.user.name)}">
         </div>
         <div class="field">
           <label>日期 Date</label>
